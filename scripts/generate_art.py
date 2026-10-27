@@ -112,11 +112,14 @@ for x,y in [outer[0],outer[2],outer[4],inner[1],inner[3],inner[5]]:
 art='\n'.join(''.join(row).rstrip() for row in chars)+'\n'
 (ASSETS/'systems-core-ascii.txt').write_text(art,encoding='utf-8')
 
-BG='#0d1117';BORDER='#30363d';WHITE='#edf2f7';BODY='#b9c3ce';MUTED='#87949f';ACC='#8ee1cd';ACCLOW='#72b8ae'
-PALETTE=['#43535f','#697b87','#99adb9','#cfdae3',ACC]
-W,H=1360,960
-cw,ch=6.55,10.65
-artx,arty=33,123
+# Full-width organization cover. The previous side-by-side layout reduced the
+# ASCII glyphs to approximately 7px on GitHub. This version devotes the entire
+# image width to the artwork. The company information stays in the HTML README.
+BG='#0d1117'; BORDER='#30363d'; WHITE='#edf2f7'; BODY='#bfc9d2'; MUTED='#91a2b0'; ACC='#97ebd8'
+PALETTE=['#536576','#8195a6','#acbfcd','#e3edf3',ACC]
+W,H=1160,1140
+cw,ch=9.28,13.56
+artx,arty=61,153
 svg=[]
 def add(s):svg.append(s)
 def t(x,y,txt,size=18,color=BODY,weight=400,anchor=None,letter_spacing=None):
@@ -125,20 +128,21 @@ def t(x,y,txt,size=18,color=BODY,weight=400,anchor=None,letter_spacing=None):
  if letter_spacing: attrs+=f' letter-spacing="{letter_spacing}"'
  add(f'<text {attrs}>{html.escape(txt)}</text>')
 add(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-labelledby="ttl dsc">')
-add('<title id="ttl">Fincraft — Systems Core ASCII and engineering profile</title>')
-add('<desc id="dsc">An original ASCII illustration of a computational core, followed by company focus, Wavern product, and technical work.</desc>')
+add('<title id="ttl">Fincraft | Systems Core ASCII</title>')
+add('<desc id="dsc">Large original ASCII illustration of a computational core made from circuitry, geometric structures and connections.</desc>')
 add(f'<rect width="{W}" height="{H}" fill="{BG}"/>')
-add(f'<rect x="10" y="10" width="1340" height="940" fill="none" stroke="{BORDER}" stroke-width="1.5"/>')
+add(f'<rect x="10" y="10" width="{W-20}" height="{H-20}" fill="none" stroke="{BORDER}" stroke-width="2"/>')
 add('<g font-family="DejaVu Sans Mono, Liberation Mono, monospace">')
-t(34,43,'fincraft / README.md',17,WHITE)
-t(1323,43,'ENGINEERING / ASCII EDITION',15,MUTED,anchor='end')
-add(f'<path d="M34 59 H1325 M810 76 V873 M34 903 H1325" stroke="{BORDER}" stroke-width="1.5" fill="none"/>')
-t(34,88,'01 / SYSTEMS CORE',14,MUTED)
-t(845,98,'02 / PROFILE',16,MUTED)
-# Print each contiguous tonal run at a precisely positioned x-coordinate.
-add(f'<g font-size="11" xml:space="preserve">')
+t(42,66,'FINCRAFT',45,WHITE,700,letter_spacing='-0.8')
+t(1117,59,'SOFTWARE / AI / ENGINEERING',17,ACC,anchor='end')
+add(f'<path d="M42 91 H1118" stroke="{BORDER}" stroke-width="2" fill="none"/>')
+t(43,123,'01 / SYSTEMS CORE',17,MUTED)
+t(1117,123,'AN ASCII STUDY',16,MUTED,anchor='end')
+# Each individual character is preserved from the original artwork.
+# Increase source glyphs and cell spacing to keep details visible when
+# GitHub scales the SVG to the available README width.
+add('<g font-size="16.2" xml:space="preserve">')
 for y,row in enumerate(chars):
- if y>67:break
  xpos=0
  while xpos<C:
   if row[xpos]==' ':xpos+=1;continue
@@ -149,33 +153,13 @@ for y,row in enumerate(chars):
   add(f'<text x="{tx:.2f}" y="{ty:.2f}" fill="{PALETTE[color_id]}">{html.escape(segment)}</text>')
   xpos=j
 add('</g>')
-# right copy, concise and easily updateable
-x=844
-t(x,173,'FINCRAFT',49,WHITE,700,letter_spacing='-0.6')
-t(x,205,'SOFTWARE  /  INTELLIGENCE  /  SYSTEMS',15,ACC)
-add(f'<path d="M{x} 231 H1316" stroke="{BORDER}" stroke-width="1.5"/>')
-t(x,275,'$ whoami',19,WHITE)
-t(x,309,'A software company building',17,BODY)
-t(x,336,'products, AI, and useful systems.',17,BODY)
-t(x,390,'$ tree ./focus',19,WHITE)
-t(x,429,'|-- products      SaaS & digital tools',16,BODY)
-t(x,461,'|-- engineering   APIs & platforms',16,BODY)
-t(x,493,'|-- intelligence  AI & automation',16,BODY)
-t(x,525,'`-- lab           prototypes & ideas',16,BODY)
-t(x,583,'$ featured_product',19,WHITE)
-t(x,618,'Wavern',19,ACC,600)
-t(x+85,618,'/ Accounting platform',16,BODY)
-t(x,667,'$ current_state',19,WHITE)
-t(x,701,'building  ->  testing  ->  evolving',16,BODY)
-t(x,754,'$ connect',19,WHITE)
-t(x,790,'wavern.com.br',17,ACC)
-t(x,827,'Projects ship here as they grow.',15,MUTED)
-t(34,933,'IDEA  >  CODE  >  SYSTEM  >  PRODUCT',16,BODY)
-t(1325,933,'FINCRAFT / BUILD WHAT MATTERS',15,MUTED,anchor='end')
+add(f'<path d="M42 1095 H1118" stroke="{BORDER}" stroke-width="2" fill="none"/>')
+t(42,1123,'IDEA  >  CODE  >  SYSTEM  >  PRODUCT',17,BODY)
+t(1117,1123,'FINCRAFT / BUILD WHAT MATTERS',17,MUTED,anchor='end')
 add('</g></svg>')
 (ASSETS/'fincraft-ascii.svg').write_text('\n'.join(svg)+'\n',encoding='utf-8')
 try:
  import cairosvg
- cairosvg.svg2png(url=str(ASSETS/'fincraft-ascii.svg'),write_to=str(ASSETS/'fincraft-preview.png'), output_width=1360, output_height=960)
+ cairosvg.svg2png(url=str(ASSETS/'fincraft-ascii.svg'),write_to=str(ASSETS/'fincraft-preview.png'), output_width=W, output_height=H)
  print('Generated PNG, SVG, ASCII',len(art),'characters; SVG',len('\n'.join(svg)),'bytes')
 except ImportError:print('SVG and TXT generated. pip install cairosvg to generate PNG preview.')
